@@ -10,13 +10,12 @@ import net.minecraft.client.toast.ToastManager;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.OrderedText;
-import net.minecraft.text.PlainTextContent;
 import net.minecraft.text.Text;
-import net.minecraft.util.Colors;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
+import java.awt.*;
 import java.util.List;
 
 public class NotificationToast implements Toast {
@@ -73,9 +72,9 @@ public class NotificationToast implements Toast {
             this.drawPart(context, i, 32 - l, j - l, l);
         }
         if (this.lines.isEmpty()) {
-            context.drawText(manager.getClient().textRenderer, this.title, 24, 12, Colors.YELLOW, false);
+            context.drawText(manager.getClient().textRenderer, this.title, 24, 12, Color.YELLOW.getRGB(), false);
         } else {
-            context.drawText(manager.getClient().textRenderer, this.title, 24, 7, Colors.YELLOW, false);
+            context.drawText(manager.getClient().textRenderer, this.title, 24, 7, Color.YELLOW.getRGB(), false);
             for (j = 0; j < this.lines.size(); ++j) {
                 context.drawText(manager.getClient().textRenderer, this.lines.get(j), 24, 18 + j * 12, -1, false);
             }
@@ -159,7 +158,7 @@ public class NotificationToast implements Toast {
     }
 
     private static MutableText text(String s){
-        return MutableText.of(new PlainTextContent.Literal(s));
+        return Text.literal(s).copy();
     }
 
     private static MutableText append(MutableText... texts){
