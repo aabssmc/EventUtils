@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "cc.aabss"
-version = "1.20.4-1.0"
+version = "1.20.4-${project.version}"
 
 repositories {
     mavenCentral()
@@ -22,6 +22,15 @@ dependencies {
     modApi("me.shedaniel.cloth:cloth-config-fabric:13.0.121")
     modApi("com.terraformersmc:modmenu:9.2.0-beta.2")
     include(implementation("com.github.NepNep21:DiscordRPC4j16:1.2.2"))
+}
+
+processResources {
+    inputs.property "version", project.version
+    filteringCharset "UTF-8"
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
 }
 
 java {
