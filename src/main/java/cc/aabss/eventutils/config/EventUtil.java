@@ -45,7 +45,7 @@ public class EventUtil {
                 ServerAddress serverAddress = ServerAddress.parse(ip);
                 ConnectScreen.connect(screen, client, serverAddress,
                         new ServerInfo("EventUtils Event Server", ip, ServerInfo.ServerType.OTHER),
-                        true, null);
+                        true);
             } catch (Exception e) {
                 LOGGER.error("Failed to connect to server: {}", e.getMessage());
                 throw new RuntimeException(e);
