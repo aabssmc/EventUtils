@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "cc.aabss"
-version = "1.20.2-1.0"
+version = "1.20.2-${project.version}"
 
 repositories {
     mavenCentral()
@@ -29,6 +29,15 @@ java {
         languageVersion = JavaLanguageVersion.of(21)
     }
     withSourcesJar()
+}
+
+processResources {
+    inputs.property "version", project.version
+    filteringCharset "UTF-8"
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
 }
 
 def oldestJava = 17
