@@ -61,7 +61,7 @@ public class NotificationToast implements Toast {
             this.justUpdated = false;
         }
         if ((i = this.getWidth()) == 160 && this.lines.size() <= 1) {
-            context.drawGuiTexture(TEXTURE, 0, 0, i, this.getHeight());
+            context.drawTexture(TEXTURE, 0, 0, 0, 0, i, this.getHeight());
         } else {
             j = this.getHeight();
             int l = Math.min(4, j - 28);
@@ -88,11 +88,11 @@ public class NotificationToast implements Toast {
         int m = j == 0 ? 20 : 5;
         int n = Math.min(60, i - m);
         Identifier identifier = TEXTURE;
-        context.drawGuiTexture(identifier, 160, 32, 0, j, 0, k, m, l);
+        context.drawTexture(identifier, 160, 32, 0, 0, 0, j, 0, k, m, l);
         for (int o = m; o < i - n; o += 64) {
-            context.drawGuiTexture(identifier, 160, 32, 32, j, o, k, Math.min(64, i - o - n), l);
+            context.drawTexture(identifier, 160, 32, 0, 0, 32, j, o, k, Math.min(64, i - o - n), l);
         }
-        context.drawGuiTexture(identifier, 160, 32, 160 - n, j, i - n, k, n, l);
+        context.drawTexture(identifier, 160, 32, 0, 0, 160 - n, j, i - n, k, n, l);
     }
 
     @Override
