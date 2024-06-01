@@ -32,7 +32,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
@@ -160,10 +159,6 @@ public class EventUtil {
             }
         }
         return null;
-    }
-
-    public static String getImage(byte[] bytes) {
-        return "data:image/png;base64," + new String(Base64.getUrlEncoder().encode(bytes));
     }
 
     public static boolean validIp(String ip){
