@@ -4,6 +4,7 @@ import cc.aabss.eventutils.api.websocket.WebSocketEvent;
 import cc.aabss.eventutils.config.EventUtil;
 import cc.aabss.eventutils.config.JsonConfig;
 import club.bottomservices.discordrpc.lib.DiscordRPCClient;
+import com.google.common.reflect.TypeToken;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import org.apache.logging.log4j.LogManager;
@@ -29,7 +30,8 @@ public class EventUtils implements ClientModInitializer {
     public static boolean DISCORD_RPC = CONFIG.loadObject("discord-rpc", true);
     public static boolean SIMPLE_QUEUE_MSG = CONFIG.loadObject("simple-queue-msg", false);
     public static boolean UPDATE_CHECKER = CONFIG.loadObject("update-checker", true);
-    public static List<String> WHITELISTED_PLAYERS = CONFIG.loadObject("whitelisted-players", List.of("Skeppy", "BadBoyHalo"));
+    public static List<String> WHITELISTED_PLAYERS = CONFIG.loadObject("whitelisted-players", List.of("Skeppy", "BadBoyHalo"),
+            new TypeToken<List<String>>() {}.getType());
 
     public static boolean FAMOUS_EVENT = CONFIG.loadObject("famous-event", true);
     public static boolean POTENTIAL_FAMOUS_EVENT = CONFIG.loadObject("potential-famous-event", true);
