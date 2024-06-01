@@ -13,7 +13,7 @@ public class EventUtilsCommand {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
         dispatcher.register(
                 ClientCommandManager.literal("eventutilsconfig")
-                        .executes((context) -> run(context.getSource().getClient())));
+                                .executes((context) -> run(context.getSource().getClient())));
     }
 
     public static int run(MinecraftClient client) {
