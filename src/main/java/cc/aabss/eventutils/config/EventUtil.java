@@ -34,6 +34,7 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
@@ -144,7 +145,10 @@ public class EventUtil {
         });
     }
 
-    public static String ip(String event){
+    public static String ip(String event, boolean housing){
+        if (housing){
+            return "hypixel.net";
+        }
         String[] split = removeMarkdown(event).split("\\s+|\\n+");
         List<String> string = new ArrayList<>();
         for (String s : split){
@@ -159,7 +163,7 @@ public class EventUtil {
                 if (validIp(s)) return s;
             }
         }
-        return null;
+        return "";
     }
 
     public static boolean validIp(String ip){
@@ -208,7 +212,11 @@ public class EventUtil {
         if (message.has("ip")) {
             ip = message.get("ip").getAsString();
         } else if (message.has("description")) {
-            ip = ip(message.get("description").getAsString());
+            if (isHousingEvent(message)){
+                ip = ip(message.get("description").getAsString(), true);
+            } else {
+                ip = ip(message.get("description").getAsString(), false);
+            }
         }
         if (EventUtils.AUTO_TP) {
             connect(ip);
@@ -217,9 +225,9 @@ public class EventUtil {
     }
 
     public static String connectFamousIP(String message) {
-        String ip = ip(message);
+        String ip = ip(message, false);
         if (EventUtils.AUTO_TP) {
-            if (ip == null) {
+            if (Objects.equals(ip, "")) {
                 connect(EventUtils.DEFAULT_FAMOUS_IP);
             } else {
                 connect(ip);
