@@ -126,7 +126,7 @@ public class EventUtil {
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
             try {
                 UpdateChecker.updateCheck();
-            } catch (URISyntaxException e) {
+            } catch (URISyntaxException | ExecutionException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
         });
