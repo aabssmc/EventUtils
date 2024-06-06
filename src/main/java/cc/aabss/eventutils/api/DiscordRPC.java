@@ -5,10 +5,9 @@ import club.bottomservices.discordrpc.lib.DiscordRPCClient;
 import club.bottomservices.discordrpc.lib.EventListener;
 import club.bottomservices.discordrpc.lib.RichPresence;
 import club.bottomservices.discordrpc.lib.User;
-import club.bottomservices.discordrpc.lib.exceptions.NoDiscordException;
+import club.bottomservices.discordrpc.lib.exceptions.DiscordException;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ServerInfo;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Timer;
@@ -20,17 +19,15 @@ public class DiscordRPC {
 
     public static void discordConnect(){
         if (EventUtils.client == null) {
+            login();
             try {
-                login();
                 EventUtils.client.connect();
                 Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                     if (EventUtils.client.isConnected) {
                         EventUtils.client.disconnect();
                     }
                 }, "YARPC Shutdown Hook"));
-            } catch (NoDiscordException e){
-                LOGGER.warn("Discord not found, not starting.");
-            }
+            } catch (DiscordException ignored){}
         }
     }
 
@@ -52,7 +49,9 @@ public class DiscordRPC {
                                 .setAssets("event_alerts", "logo by Bansed",
                                         getCurrentAction(true), DiscordRPC.ver())
                                 .build();
-                        client.sendPresence(presence);
+                        if (client.isConnected) {
+                            client.sendPresence(presence);
+                        }
                     }
                 }, 0, 5000);
             }
@@ -64,11 +63,7 @@ public class DiscordRPC {
         if (client.getServer() != null && client.getServer().isRunning()) {
             return asset ? "singleplayer" : "Singleplayer";
         } else if (client.getCurrentServerEntry() != null) {
-            ServerInfo serverInfo = client.getCurrentServerEntry();
-            if (asset) {
-                return "https://api.mcstatus.io/v2/icon/"+serverInfo.address;
-            }
-            return "Multiplayer";
+            return asset ? "https://api.mcstatus.io/v2/icon/"+client.getCurrentServerEntry().address : "Multiplayer";
         } else {
             return asset ? "themainmenu" : "the Main Menu";
         }
