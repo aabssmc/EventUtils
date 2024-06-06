@@ -13,22 +13,15 @@ import net.minecraft.util.Formatting;
 
 public class EventTeleportCommand {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher){
+        register(dispatcher, "eventteleport");
+        register(dispatcher, "eventutils");
+        register(dispatcher, "eventtp");
+        register(dispatcher, "evtp");
+    }
+
+    public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher, String name){
         dispatcher.register(
-                ClientCommandManager.literal("eventteleport")
-                        .then(ClientCommandManager.argument("eventType", StringArgumentType.greedyString())
-                                .suggests((context, builder) -> builder
-                                        .suggest("famous")
-                                        .suggest("potential")
-                                        .suggest("money")
-                                        .suggest("partner")
-                                        .suggest("fun")
-                                        .suggest("housing")
-                                        .suggest("community")
-                                        .suggest("civilization").buildFuture())
-                                .executes(context -> run(context.getSource().getPlayer(), context.getInput()))
-                        ));
-        dispatcher.register(
-                ClientCommandManager.literal("eventutils")
+                ClientCommandManager.literal(name)
                         .then(ClientCommandManager.argument("eventType", StringArgumentType.greedyString())
                                 .suggests((context, builder) -> builder
                                         .suggest("famous")
