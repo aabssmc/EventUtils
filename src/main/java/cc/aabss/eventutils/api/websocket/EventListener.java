@@ -6,6 +6,7 @@ import cc.aabss.eventutils.config.EventUtil;
 import com.google.gson.JsonObject;
 
 import static cc.aabss.eventutils.config.EventUtil.*;
+import static cc.aabss.eventutils.config.EventUtil.prize;
 
 public class EventListener {
 
@@ -36,7 +37,7 @@ public class EventListener {
 
     public void onMoneyEvent(JsonObject message) {
         if (EventUtils.MONEY_EVENT){
-            NotificationToast.addMoneyEvent();
+            NotificationToast.addMoneyEvent(prize(message));
             LAST_MONEY_IP = getAndConnectIP(message);
         }
     }
