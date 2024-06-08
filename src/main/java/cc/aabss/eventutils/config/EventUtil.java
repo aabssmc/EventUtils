@@ -33,7 +33,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
@@ -362,6 +361,16 @@ public class EventUtil {
                     newValue.forEach(name -> names.add(name.toLowerCase()));
                     EventUtils.WHITELISTED_PLAYERS = names;
                     CONFIG.saveObject("whitelisted-players", EventUtils.WHITELISTED_PLAYERS);
+                    CONFIG.saveConfig(CONFIG.JSON);
+                })
+                .build());
+        generalCategory.addEntry(ConfigEntryBuilder.create()
+                .startIntField(Text.literal("Minimum Prize"), EventUtils.MINIMUM_PRIZE)
+                .setDefaultValue(() -> EventUtils.MINIMUM_PRIZE)
+                .setTooltip(Text.literal("The minimum prize of a money event required to ping you."))
+                .setSaveConsumer(newValue -> {
+                    EventUtils.MINIMUM_PRIZE = newValue;
+                    CONFIG.saveObject("minimum-prize", EventUtils.MINIMUM_PRIZE);
                     CONFIG.saveConfig(CONFIG.JSON);
                 })
                 .build());
