@@ -18,7 +18,7 @@ addReplacementsTask(setOf("fabric.mod.json"), getDefaultReplacements() + mapOf("
 
 // Repositories
 repository(Repository.MAVEN_CENTRAL, Repository.JITPACK)
-repository("https://maven.shedaniel.me", "https://maven.fabricmc.net", "https://maven.terraformersmc.com/releases")
+repository("https://maven.isxander.dev/releases", "https://maven.fabricmc.net", "https://maven.terraformersmc.com/releases")
 
 // Dependencies
 dependencies {
@@ -26,7 +26,7 @@ dependencies {
     mappings("net.fabricmc:yarn:1.20.6+build.3:v2")
     modImplementation("net.fabricmc", "fabric-loader", "0.15.11")
     modImplementation("net.fabricmc.fabric-api", "fabric-api", "0.99.0+1.20.6")
-    modApi("me.shedaniel.cloth", "cloth-config-fabric", "14.0.126")
+    modImplementation("dev.isxander", "yet-another-config-lib", "3.5.0+1.21-fabric")
     modApi("com.terraformersmc", "modmenu", "10.0.0-beta.1")
     include(implementation("com.github.NepNep21", "DiscordRPC4j16", "1.2.2"))
 }
