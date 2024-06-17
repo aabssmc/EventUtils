@@ -26,7 +26,7 @@ dependencies {
     mappings("net.fabricmc:yarn:1.20.6+build.3:v2")
     modImplementation("net.fabricmc", "fabric-loader", "0.15.11")
     modImplementation("net.fabricmc.fabric-api", "fabric-api", "0.99.0+1.20.6")
-    modImplementation("dev.isxander", "yet-another-config-lib", "3.5.0+1.21-fabric")
+    modImplementation("dev.isxander", "yet-another-config-lib", "3.5.0+1.20.6-fabric")
     modApi("com.terraformersmc", "modmenu", "10.0.0-beta.1")
     include(implementation("com.github.NepNep21", "DiscordRPC4j16", "1.2.2"))
 }
