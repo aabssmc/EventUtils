@@ -10,6 +10,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
+import dev.isxander.yacl3.api.controller.DropdownStringControllerBuilder;
 import dev.isxander.yacl3.api.controller.StringControllerBuilder;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
@@ -23,6 +24,7 @@ import net.minecraft.client.gui.screen.multiplayer.ConnectScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ServerAddress;
 import net.minecraft.client.network.ServerInfo;
+import net.minecraft.entity.EntityType;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -35,8 +37,10 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static cc.aabss.eventutils.EventUtils.*;
 import static cc.aabss.eventutils.EventUtils.TEXT;
@@ -44,6 +48,8 @@ import static cc.aabss.eventutils.config.HidePlayers.HIDEPLAYERS;
 import static cc.aabss.eventutils.config.HidePlayers.HIDEPLAYERSBIND;
 
 public class EventUtil {
+
+    public static List<EntityType<?>> entityTypes = new ArrayList<>();
 
     public static void connect(String ip){
         MinecraftClient client = MinecraftClient.getInstance();
@@ -70,13 +76,12 @@ public class EventUtil {
     }
 
     public static Text replace(Text text){
-        Text originalText = text;
         if (!SIMPLE_QUEUE_MSG) {
-            return originalText;
+            return text;
         }
-        String originalString = originalText.getString();
+        String originalString = text.getString();
         if (!originalString.contains(TEXT)) {
-            return originalText;
+            return text;
         }
         String modifiedString = originalString.replace(TEXT, "").replaceFirst("\n", "");
         String[] lines = modifiedString.split("\n");
@@ -152,7 +157,7 @@ public class EventUtil {
             }
         }
         if (string.size() == 1){
-            return string.get(0);
+            return string.getFirst();
         } else if (string.size() > 1){
             for (String s : string){
                 if (validIp(s)) return s;
@@ -394,7 +399,36 @@ public class EventUtil {
                                         })
                                 .controller(BooleanControllerBuilder::create)
                                 .build()
-                        ).build())
+                        )
+                        .option(ListOption.<String>createBuilder()
+                                .name(Text.literal("Hidden Entity Types"))
+                                .description(OptionDescription.of(Text.literal("The types of entities that will be hidden.")))
+                                .binding(EventUtils.HIDDEN_ENTITY_TYPES.stream()
+                                                .map(entityType -> EntityType.getId(entityType).toString())
+                                                .collect(Collectors.toList()),
+                                        () -> EventUtils.HIDDEN_ENTITY_TYPES.stream()
+                                                .map(entityType -> EntityType.getId(entityType).toString())
+                                                .collect(Collectors.toList()),
+                                        newValue -> {
+                                            EventUtils.HIDDEN_ENTITY_TYPES = newValue.stream()
+                                                    .map(id -> {
+                                                        Optional<EntityType<?>> entityType = EntityType.get(id);
+                                                        return entityType.orElse(null);
+                                                    })
+                                                    .collect(Collectors.toList());
+                                            CONFIG.saveObject("hidden-entity-types", EventUtils.HIDDEN_ENTITY_TYPES);
+                                            CONFIG.saveConfig(CONFIG.JSON);
+                                        })
+                                .controller(option -> DropdownStringControllerBuilder.create(option)
+                                        .values(EventUtil.entityTypes.stream()
+                                                .map(entityType -> EntityType.getId(entityType).toString())
+                                                .collect(Collectors.toList())
+                                        )
+                                )
+                                .initial(EntityType.getId(EntityType.ALLAY).toString())
+                                .build()
+                        ).build()
+                )
                 .category(alertsCategory
                         .option(alertEntry("Famous Events", EventUtils.FAMOUS_EVENT, newValue -> EventUtils.FAMOUS_EVENT = newValue))
                         .option(alertEntry("Potential Famous Events", EventUtils.POTENTIAL_FAMOUS_EVENT, newValue -> EventUtils.POTENTIAL_FAMOUS_EVENT = newValue))
